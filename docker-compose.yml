@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  php:
+    build: php
+    volumes:
+      - ./site/:/var/www/html/
+    environment:
+      - MYSQL_HOST=db
+  apache:
+    build: apache
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+    volumes:
+      - ./site/:/var/www/html/
+      - ./apache/docker.apache.conf:/usr/local/apache2/conf.d/docker.apache.conf
+  db:
+    build: db
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_ROOT_PASSWORD=12345678
+    ports:
+      - "3306:3306"
